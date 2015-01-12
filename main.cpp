@@ -3,6 +3,8 @@
 
 using namespace std;
 
+Rafał kocha Kasię :)
+
 class LiczbaDziesietna
 {
     private:
