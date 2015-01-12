@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1420984880 source:/home/rafa/c++/MEN/ArytmetykaFL/main.cpp
+	<iostream>
+	<string>
+
