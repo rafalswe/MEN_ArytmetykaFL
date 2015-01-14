@@ -3,8 +3,6 @@
 
 using namespace std;
 
-Rafał kocha Kasię :)
-
 class LiczbaDziesietna
 {
     private:
@@ -36,6 +34,7 @@ class LiczbaFl
         string mantysa;
        // LiczbaDziesietna liczbaDziesietna;
         void tworzMantyse(LiczbaDziesietna parLiczbaDziesietna);
+        void tworzCeche(int iMantysa);
     public:
     LiczbaFl(LiczbaDziesietna parLiczbaDziesietna);
     void wyswietl();
@@ -62,8 +61,8 @@ LiczbaDziesietna::LiczbaDziesietna(string par)
                 break;
             }
         }
-        if(czyKropka) czescCalkowita = par.substr(0,kropka);
-        else czescCalkowita = par;
+        if(czyKropka) czescCalkowita = par.substr(1,kropka-1);
+        else czescCalkowita = par.substr(1,par.length());
     }
     else
     {
@@ -82,18 +81,24 @@ LiczbaDziesietna::LiczbaDziesietna(string par)
     }
     if(czyKropka) czescUlamkowa = par.substr(kropka + 1, par.length() - kropka);
     else czescUlamkowa = "0";
+
+
+
     zamienNaDouble(czyKropka);
 }
 
 void LiczbaDziesietna::zamienNaDouble(bool czyKropka)
 {
     //calkowita
+
+    cout<<"String czCalkowita: "<<czescCalkowita<<" czUlamkowa: "<<czescUlamkowa<<endl;
     dCalkowita = 0;
     int mnoznik = 1;
     for(int i=czescCalkowita.length()-1; i>=0; i--)
     {
        dCalkowita = dCalkowita + ((int)czescCalkowita[i] - 48) * mnoznik;
        mnoznik = mnoznik * 10;
+       cout<<"for dCalkowita: "<< i <<"  "<<dCalkowita<<endl;
     }
     //ulamek
     if(czyKropka)
@@ -161,8 +166,9 @@ void LiczbaFl::tworzMantyse(LiczbaDziesietna parLiczbaDziesietna)
     string bufor = "";
 
     //czesc Calkowita
-    if(czCalkowita > 0)
+    if(czCalkowita != 0)
     {
+        if(czCalkowita < 0) czCalkowita = czCalkowita*(-1);
         jestCalkowita = true;
         while(czCalkowita != 0)
         {
@@ -196,9 +202,6 @@ void LiczbaFl::tworzMantyse(LiczbaDziesietna parLiczbaDziesietna)
         i++;
     }
 
-    cout<<"bufor: "<<bufor<<endl;
-    cout<< "bufor dlug: "<<bufor.length()<<endl;
-
     if(jestCalkowita)
     {
         i = iMantysa;
@@ -215,7 +218,55 @@ void LiczbaFl::tworzMantyse(LiczbaDziesietna parLiczbaDziesietna)
     }
     else
     {
+        i = 0;
+        int jedynka;
+        while(bufor[i] != '1')   //szukanie pierwszej jedynki
+        {
+            i++;
+        }
+        iMantysa = (i + 1) *(-1);
 
+        i++;
+        jedynka = i;
+        i=0;
+        while((i < mantysa.length()) && (i + jedynka < bufor.length()))
+        {
+            mantysa[i] = bufor[i + jedynka];
+            i++;
+        }
+        if(i != mantysa.length() -1)
+        {
+            for(unsigned  int j = i; j < mantysa.length(); j++)
+                mantysa[j] = '0';
+        }
+    }
+    cout<<"iMantysa: "<<iMantysa<<endl;
+    tworzCeche(iMantysa);
+
+}
+
+void LiczbaFl::tworzCeche(int iMantysa)    //cecha = 0 -> 0; cecha = 31 -> inf; cecha = 1 - 15 -> liczby > 1
+{
+    int i=cecha.length()-1;                //cecha = 16 - 30 -> liczby < 0;
+    int iCecha;
+    if(iMantysa<=15 && iMantysa>=-15)
+    {
+
+        if(iMantysa >= 0)
+        {
+            iCecha = iMantysa + 1;
+        }
+        else
+        {
+            iCecha = 15 + (iMantysa *(-1));
+        }
+    }
+    else iCecha = 31;   //nieskonczonosc
+    while(i>=0)
+    {
+        cecha[i] = (char)48+(iCecha % 2);
+        iCecha = iCecha/2;
+        i--;
     }
 }
 
@@ -230,13 +281,6 @@ void LiczbaFl::wyswietl()
 
 int main()
 {
-    string test;
-    test.insert(0,"0");
-    test.insert(0,"0");
-    test.insert(0,"1");
-    test.insert(0,"0");
-    test.insert(0,"1");
-    cout<<test<<endl;
     string sliczbaDzies;
     cout << "Podaj liczbe w systemie 10:" << endl;
     cin >> sliczbaDzies;
